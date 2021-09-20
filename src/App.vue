@@ -1,6 +1,7 @@
 <template>
   <div class="vue-wrapper">
     <router-view></router-view>
+    <div id="mask"></div>
   </div>
 </template>
 <script>
@@ -52,4 +53,18 @@ input.el-input__inner {
 // .el-col-10 div:first-child {
 //   width: 100% !important;
 // }
+#mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3)
+    url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMMyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCAwIDAiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8Y2lyY2xlIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSI0IiBjeD0iNTAiIGN5PSI1MCIgcj0iNDQiIHN0eWxlPSJvcGFjaXR5OjAuNTsiPjwvY2lyY2xlPgo8Y2lyY2xlIGZpbGw9IiNmZmYiIGN4PSI4IiBjeT0iNTQiIHI9IjYiIHRyYW5zZm9ybT0icm90YXRlKDE0Ny4zMDUgNTAgNDkuNjM2NykiPgoJPGFuaW1hdGVUcmFuc2Zvcm0gYXR0cmlidXRlTmFtZT0idHJhbnNmb3JtIiBkdXI9IjJzIiB0eXBlPSJyb3RhdGUiIGZyb209IjAgNTAgNDgiIHRvPSIzNjAgNTAgNTIiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIj48L2FuaW1hdGVUcmFuc2Zvcm0+CjwvY2lyY2xlPgo8L3N2Zz4=')
+    center center no-repeat;
+  -webkit-background-size: 100px;
+  background-size: 100px;
+  z-index: 10000;
+  display: none;
+}
 </style>

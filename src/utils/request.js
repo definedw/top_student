@@ -1,9 +1,7 @@
 import axios from 'axios'
+import router from '@/router'
 
 import {
-  sessionGet,
-  sessionSet,
-  //   router,
   maskShow,
   maskHide,
 } from 'utils/helper'
@@ -16,7 +14,9 @@ import {
   timeNum,
   intervalTime,
   resCode,
+  reToken
 } from '@/common/netconfig'
+import { localGet } from './helper'
 
 const PROTECTED = Symbol()
 
@@ -25,7 +25,7 @@ class Request {
     service: axios,
     axiosConfig: {},
     pending: [],
-    cancelToken: [],
+    cancelToken: axios.CancelToken,
   }
   static _instance = Request
 
@@ -36,8 +36,8 @@ class Request {
     this.interceptorsResponse()
   }
   requestConfig() {
-    this[PROTECTED].config = {
-      baseUrl: baseUrl,
+    this[PROTECTED].axiosConfig = {
+      baseURL: baseUrl,
       headers: {
         post: {
           'Content-Type': contentType,
@@ -51,13 +51,13 @@ class Request {
       (config) => {
         const keyOfRequest = this.getKeyofRequest(config)
         this.removePending(keyOfRequest, true)
-        config.cancelToken = new this.CancelToken((c) => {
+        config.cancelToken = new this[PROTECTED].cancelToken((c) => {
           this[PROTECTED].pending.push({
             url: keyOfRequest,
-            cancle: c,
+            cancel: c,
           })
         })
-        this.requestLog(config)
+        config.headers['authorization'] = localGet('token')
         return config
       },
       (error) => {
@@ -82,7 +82,6 @@ class Request {
     )
   }
   handleResponse(response) {
-    this.requestLog(response)
 
     this.removePending(this.getKeyofRequest(response.config))
 
@@ -98,12 +97,20 @@ class Request {
       case 500: {
         ElMessage({
           type: 'error',
-          msg,
+          message: msg,
           duration: 3500,
         })
         return Promise.reject({ msg })
       }
       case 403: {
+        ElMessage({
+          type: 'error',
+          message: 'Sorry,you need to login or register first.',
+          duration: 3500,
+        })
+        // reToken = true
+        router.push('/login')
+        return Promise.reject({ msg })
       }
       default: {
         return Promise.reject({ msg })
@@ -168,12 +175,13 @@ class Request {
           data: res.result,
           code: res.code,
         })
-      })
-    }, reject)
+      }, reject)
+    })
   }
   static getInstance() {
     this._instance || (this._instance = new Request())
     return this._instance
   }
 }
-export default Request.getInstance()
+const MyRequest = new Request()
+export default MyRequest

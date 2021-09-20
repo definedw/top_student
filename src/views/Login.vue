@@ -19,19 +19,19 @@
         </div>
         <div class="login-form">
           <el-form :model="formData"
+                   :rules="rules"
                    ref="ruleForm">
-            <el-form-item prop="email"
-                          :rules="[{required: true, message: 'Please enter correct email address.', trigger: ['blur', ]}]">
+            <el-form-item prop="username">
               <el-input v-model="formData.username"
                         placeholder="Student ID"></el-input>
             </el-form-item>
-            <el-form-item prop="password"
-                          :rules="[{required: true, message: 'Please enter correct email address', trigger: 'blur'},{min: 6,max: 20, message: 'Password length invalid.'}]">
+            <el-form-item prop="password">
               <el-input v-model="formData.password"
+                        type="password"
                         placeholder="Password"></el-input>
             </el-form-item>
             <div class="login-bar">
-              <button type="submit"
+              <button @click.prevent="formSubmit"
                       class="btn-login">Login</button>
             </div>
             <div class="forgot-link">
@@ -61,9 +61,11 @@
   </div>
 </template>
 <script>
-import { reactive, ref, onMounted, toRefs } from 'vue'
-import { router, useRoute } from 'utils/helper'
-import axios from 'utils/request'
+import { reactive, ref } from 'vue'
+// import { router, route } from '@/utils/helper.js'
+import { useRoute, useRouter } from 'vue-router'
+import request from '@/utils/request.js'
+import store from '@/stores'
 export default {
   setup() {
     const formData = reactive({
@@ -71,31 +73,32 @@ export default {
       password: '',
       loginTarget: 'Current_Student_Entrance'
     })
+    const router = useRouter()
     const ruleForm = ref(null)
-    onMounted = () => {
-      debugger
-      sessionStorage.removeItem('headerImg')
+    const rules = {
+      username: [{ required: true, message: 'Please enter your Student ID.', trigger: 'blur' }, { min: 6, max: 20, message: 'Student ID length invalid.' }],
+      password: [{ required: true, message: 'Please enter your password correct.', trigger: 'blur' }, { min: 6, max: 20, message: 'Password length invalid.' }]
     }
-    const formSubmit = async () => {
+    const formSubmit = () => {
       const url = `/public/auth/user/login/username`
-      const data = {
-        ...formData.value
-      }
-      refs[ruleForm].validateor(valid => {
+      ruleForm.value.validate(valid => {
         if (valid) {
-          await axios.post(url, data).then(res => {
-            router.push('/home')
+          request.post(url, { ...formData }).then(res => {
+            store.dispatch('commitUserInfo', res.data)
+            store.dispatch('commitToken', res.data.token)
+            router.push({
+              path: '/home'
+            })
           })
         }
       })
 
     }
     return {
-      //   toRefs(formData),
-      //   ruleForm,
-      //   onMounted(),
-      //   formSubmit()
-
+      ruleForm,
+      formData,
+      rules,
+      formSubmit
     }
   }
 }

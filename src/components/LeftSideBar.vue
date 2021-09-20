@@ -1,0 +1,78 @@
+
+<template>
+  <div class="sidebar">
+    <!-- 在body 上添加样式打开边栏 -->
+    <div class="sidebar-content ">
+      <!--<h2 class="nav-title">{{ title }}</h2>-->
+      <ul class="nav">
+        <li :class="{ active: $route.matched.some(m => m.path === item.url) }"
+            v-for="item in showleftList"
+            :key="item.id">
+          <router-link :to="item.url">
+            <i :class="'ico ' + item.icon"></i>
+            {{ item.name }}
+          </router-link>
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  setup() {
+    const state = reactive({
+      leftList: [
+        {
+          id: '1',
+          url: '/home/homePage',
+          icon: '',
+          name: 'Home'
+        },
+
+        {
+          id: '7',
+          url: '/home/Offer',
+          icon: '',
+          name: 'Offers'
+        },
+        {
+          id: '4',
+          url: '/home/Orders',
+          icon: '',
+          name: 'Orders'
+        },
+        {
+          id: '5',
+          url: '/home/WalletList',
+          icon: '',
+          name: 'Wallet'
+        },
+        {
+          id: '6',
+          url: '/home/supportonline',
+          icon: '',
+          name: 'Support Online'
+        }
+      ]
+    })
+    const showleftList = computed(() => {
+      if (subOrganizationCode == 'PY') {
+        return state.leftList.filter(item => {
+          return item.id != 5
+        })
+      } else {
+        return state.leftList
+      }
+    })
+
+    return {
+      showleftList,
+      state
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+</style>

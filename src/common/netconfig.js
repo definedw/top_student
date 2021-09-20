@@ -17,3 +17,5 @@ export const intervalTime = 1000
 
 /* response code table */
 export const resCode = [204, 401, 403, 404, 406, 500]
+
+export const reToken = false
