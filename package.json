@@ -1,0 +1,32 @@
+{
+  "name": "top_student",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "element-plus": "^1.1.0-beta.8",
+    "vue": "^3.2.6",
+    "vue-router": "^4.0.11",
+    "vuex": "^4.0.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^1.6.0",
+    "@vitejs/plugin-vue-jsx": "^1.1.7",
+    "@vue/compiler-sfc": "^3.2.6",
+    "autoprefixer": "^10.3.4",
+    "node-sass": "^6.0.1",
+    "path": "^0.12.7",
+    "postcss": "^8.3.6",
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-modules": "^4.2.2",
+    "sass": "^1.39.0",
+    "vite": "^2.5.2",
+    "vite-plugin-babel-import": "^2.0.5",
+    "vite-plugin-compression": "^0.3.5",
+    "vite-plugin-style-import": "^1.2.1"
+  }
+}

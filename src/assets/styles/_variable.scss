@@ -1,0 +1,37 @@
+//color
+$black: #000 !default;
+$gray-1: #e6e7e8 !default;
+$gray-2: #a7a9ac !default;
+$gray-3: #797a7d !default;
+$gray-4: #636471 !default;
+$gray-5: #414042 !default;
+$white: #fff !default;
+
+@mixin clearfix() {
+  &::after {
+    display: block;
+    clear: both;
+    content: '';
+  }
+}
+
+@mixin flex() {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+}
+
+@mixin v-middle() {
+  -webkit-align-items: center;
+  align-items: center;
+}
+@mixin v-center() {
+  -webkit-justify-content: center;
+  justify-content: center;
+}
+@mixin v-right() {
+  -webkit-justify-content: flex-end;
+  justify-content: flex-end;
+}

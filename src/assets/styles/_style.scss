@@ -1,0 +1,31 @@
+$primary-color: #1B75BC;
+$secondary-color: #27AAE1, #005C8A, #00A79D, #7C51A1, #005C8A;
+$text-color: #1D262B, #C8BBAB, rgba(200, 187, 171, .5), rgba(200, 187, 171, .2);
+$greys-color: #E6E7E8, #A7A9AC, #797A7D, #636471, #414042;
+$sidebar-bg: #fff;
+
+.card {
+  border-radius: 5px;
+  background-color: $white;
+  margin-bottom: 30px;
+  overflow: hidden;
+  box-shadow: 0 1px 15px 1px rgba(69, 65, 78, .08);
+
+  .card-header {
+    padding: 16px 20px;
+
+    .card-title {
+      line-height: 1.5;
+      font-size: 20px;
+      color: nth($text-color, 1);
+    }
+  }
+}
+
+#demo .el-form-item__content {
+  width: 80%;
+}
+
+#demo .el-select {
+  width: 100%;
+}
