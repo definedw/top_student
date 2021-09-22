@@ -71,3 +71,7 @@ npm run build
 
   Error: [Vite-plugin-babel-import]options.map is not function
 ```
+
+- vite can't watch `LeftSidebar.vue` file on change.
+
+- Vite components onload problem.

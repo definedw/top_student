@@ -2,6 +2,7 @@
 <template>
   <div class="sidebar">
     <!-- 在body 上添加样式打开边栏 -->
+    <!-- vite无法监听文件变化，问题未知 -->
     <div class="sidebar-content ">
       <!--<h2 class="nav-title">{{ title }}</h2>-->
       <ul class="nav">
@@ -19,7 +20,10 @@
 </template>
 
 <script>
+import { computed, reactive } from "vue"
+import store from "@/stores"
 export default {
+  name: 'LeftSideBar',
   setup() {
     const state = reactive({
       leftList: [
@@ -29,7 +33,6 @@ export default {
           icon: '',
           name: 'Home'
         },
-
         {
           id: '7',
           url: '/home/Offer',
@@ -56,8 +59,11 @@ export default {
         }
       ]
     })
+    const computeSubcode = computed(() => {
+      return store.state.subOrganizationCode
+    })
     const showleftList = computed(() => {
-      if (subOrganizationCode == 'PY') {
+      if (computeSubcode.value == 'PY') {
         return state.leftList.filter(item => {
           return item.id != 5
         })

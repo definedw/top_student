@@ -7,7 +7,9 @@ const store = createStore({
     return {
       userInfo: localGet('userInfo') || null,
       token: localGet('token') || '',
-      headImg: localGet('headImg') || noImg['../assets/images/timg.jpeg']
+      headImg: localGet('headImg') || noImg['../assets/images/timg.jpeg'],
+      subOrganizationCode: localGet('subOrganizationCode') || '',
+      surveyCount: 0
     }
   },
   getters: {
@@ -37,6 +39,13 @@ const store = createStore({
       localRemove('token')
       state.userInfo = null
       state.token = null
+    },
+    SET_SUBCODE(state, code) {
+      state.subOrganizationCode = code
+      localSet('subOrganizationCode', code)
+    },
+    SET_SURVERY(state, count) {
+      state.surveyCount = count
     }
   },
   actions: {
@@ -48,6 +57,12 @@ const store = createStore({
     },
     commitHeadImg({ commit }, img) {
       commit('SET_HEADIMG', img)
+    },
+    commitCode({ commit }, code) {
+      commit('SET_SUBCODE', code)
+    },
+    commitSurveryCount({ commit }, count) {
+      commit('SET_SURVERY', count)
     }
   }
 })

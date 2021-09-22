@@ -33,12 +33,6 @@
               </div>
             </div>
           </el-col>
-          <!--<el-col :xs="24" :md="8">-->
-          <!--<div class="current-course">-->
-          <!--<div class="course" :title="dataListcourseName">{{ dataListcourseName}}</div>-->
-          <!--<div class="campus" :title="dataListcampusName">{{ dataListcampusName }}</div>-->
-          <!--</div>-->
-          <!--</el-col>-->
           <el-col :xs="dataList.offer.status==='Invalid'?0:24"
                   :md="dataList.offer.status==='Invalid'?0:8"
                   :lg="dataList.offer.status==='Invalid'?0:8">
@@ -48,9 +42,6 @@
                 <span class="label">Offer Status: </span>
                 {{ dataList.offer.paid?"Payment Completed":dataList.offer.status }}
               </div>
-              <!--<div class="offer" @click="openUrl()" v-if="dataList.offer">-->
-              <!--Download Offer No: {{ dataList.offer.code }}-->
-              <!--</div>-->
               <div class="accept-btn">
                 <el-button v-if="!dataList.offer.paid&&(dataList.offer.status === 'Pending'||dataList.offer.status === 'Accepted')"
                            type="primary"
@@ -69,79 +60,6 @@
         </el-row>
       </div>
     </div>
-
-    <!--<div class="homePageTopBox" v-if="dataList.student.familyName">-->
-    <!--<div class="userMessage">-->
-    <!--<div class="imgBox">-->
-    <!--<img :src="dataList.student.photo" alt="My Photo" />-->
-    <!--</div>-->
-    <!--<div-->
-    <!--class="modifyBtn el-icon-upload"-->
-    <!--@click="routerPath('/home/myProfile')"-->
-    <!--&gt;</div>-->
-    <!--<div class="userMessageDetails">-->
-    <!--<span class="name"-->
-    <!--&gt;{{ dataList.student.firstGivenName }}{{ ' '-->
-    <!--}}{{ dataList.student.familyName }}</span-->
-    <!--&gt;-->
-    <!--<span class="studentId"-->
-    <!--&gt;Student No. <i>{{ dataList.student.studentNum }}</i></span-->
-    <!--&gt;-->
-    <!--<span class="female"-->
-    <!--&gt;{{ dataList.student.genderName }} | Birth:-->
-    <!--{{ dataList.student.birthDate.split('T')[0] }}-->
-    <!--| From china</span-->
-    <!--&gt;-->
-    <!--<span class="call"-->
-    <!--&gt;<i class="el-icon-date"></i-->
-    <!--&gt;{{ dataList.student.mobileNumber }}</span-->
-    <!--&gt;-->
-    <!--<span class="email"-->
-    <!--&gt;<i class="el-icon-date"></i>{{ dataList.student.email2 }}</span-->
-    <!--&gt;-->
-    <!--<div class="userMessageTipBox">-->
-    <!--<div class="userMessageTip">-->
-    <!--{{-->
-    <!--dataList.student.internationalStudent-->
-    <!--? 'international'-->
-    <!--: 'Domestic'-->
-    <!--}}-->
-    <!--</div>-->
-    <!--<div class="userMessageTip" v-if="dataList.student.feeHelp">-->
-    <!--FEE-HELP-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
-    <!--&lt;!&ndash;userMessage&ndash;&gt;-->
-    <!--<div class="offerBox">-->
-    <!--<div class="offerBoxTitle">Current Offer</div>-->
-    <!--<div class="downloadBox" @click="openUrl()" v-if="dataList.offer">-->
-    <!--<i class="el-icon-printer"></i-->
-    <!--&gt;<span>Download Offer No.{{ dataList.offer.code }}</span>-->
-    <!--</div>-->
-    <!--<div class="status" v-if="dataList.offer">-->
-    <!--Status: <strong>{{ dataList.offer.status }}</strong>-->
-    <!--</div>-->
-    <!--&lt;!&ndash;當前 Pay Offer 功能缺失&ndash;&gt;-->
-    <!--<el-button-->
-    <!--type="primary"-->
-    <!--class="offerBtn"-->
-    <!--:class="dataList.offer.status"-->
-    <!--@click="acceptOffer()"-->
-    <!--v-if="dataList.offer"-->
-    <!--&gt;{{-->
-    <!--dataList.offer.status === 'Pending'-->
-    <!--? 'Accept Offer'-->
-    <!--: dataList.offer.status === 'Accepted'-->
-    <!--? 'Pay Offer'-->
-    <!--: ''-->
-    <!--}}</el-button-->
-    <!--&gt;-->
-    <!--</div>-->
-    <!--</div>-->
-
     <div class="page-inner">
       <div class="page-msg">
         <div class="msg-caution"
@@ -150,16 +68,6 @@
           cannot be permitted to do some actions, e.g. module selection, check
           result and so on.
         </div>
-        <!--暂时-->
-        <!--<div class="msg-notice" v-if="dataList.orderToPay !== 'none'">-->
-        <!--{{-->
-        <!--dataList.orderToPay === 'needToPay'-->
-        <!--? `Notice: The due date of this semester for payment is ${formatDate(-->
-        <!--dataList.orderPaymentExpireTime-->
-        <!--)}. Please pay the tuition before the due date, or overdue penalty will be imposed.`-->
-        <!--: 'Notice: The overdue penalty will be charged by the day. Please pay the tuition as soon as possible.'-->
-        <!--}}-->
-        <!--</div>-->
       </div>
       <div>
         <el-alert v-if="dataList.waitingAcceptOfferNumbers>0"
@@ -207,24 +115,13 @@
                      @click="results(item.id, item.status)">
                   My Results
                 </div>
-                <!--<div-->
-                <!--style="color: #fff;background: #636471;margin-left: 10px;"-->
-                <!--class="resultsBtn"-->
-                <!--v-if="item.graduated"-->
-                <!--@click="Completion(item.id, item.status)"-->
-                <!--&gt;-->
-                <!--Completion Letter-->
-                <!--</div>-->
               </div>
             </div>
             <!--EnrolmentTop-->
             <div class="EnrolmentDetails"
                  style="padding: 0 15px;">
               <span>Course: <strong :title="item.courseName">{{ item.courseName }}</strong></span>
-              <!--<span v-if="item.wallet"-->
-              <!--&gt;Deposit Balance:-->
-              <!--<strong>A${{ item.wallet.balance | format }}</strong></span-->
-              <!--&gt;-->
+
               <span>Campus: <strong>{{ item.campusName }}</strong></span>
               <span>Start-to-End:
                 <strong>{{ item.startDate | UTCTime }} to
@@ -235,31 +132,20 @@
                   item.scholarshipVo ? item.scholarshipVo.name : ' - - -'
                 }}</strong></span>
 
-              <!--<span-->
-              <!--&gt;Paid Fees:-->
-              <!--<strong>A${{ item.paidFees | format }}</strong></span-->
-              <!--&gt;-->
-
-              <!--<span-->
-              <!--&gt;Unpaid Fees:-->
-              <!--<strong>A${{ item.unpaidFees | format }}</strong></span-->
-              <!--&gt;-->
               <span></span>
               <span class="statusEnrolled">Status: {{ item.coEnrollStatusName }}</span>
-              <!--<span class="payment" style="padding-left: 0;background: #fff"-->
-              <!--&gt;Disabled Payment: {{ item.disabledPayment?'Yes':'No' }}</span-->
-              <!--&gt;-->
+
             </div>
           </div>
         </div>
       </div>
     </div>
-    <paypage v-if="dialogVisible"
-             @close="closed"
-             :id="id"
-             :totalPayment="totalPayment"
-             @success="getInfo"
-             @default="getInfo"> </paypage>
+    <pay-page v-if="dialogVisible"
+              @close="state.dialogVisible = true"
+              :id="id"
+              :totalPayment="totalPayment"
+              @success="getInfo"
+              @default="getInfo"> </pay-page>
     <!--homePageTop-->
     <survey-dialog v-if="visible"
                    :id="queryId"
@@ -272,13 +158,22 @@
 </template>
 
 <script>
-// import TabList from '../components/TabList'
-import dataUtils from '../utils/DateUtils'
-import paypage from '../components/paypage'
-import surveyDialog from './Survey/surveyDialog'
+import { defineAsyncComponent } from 'vue'
+import { reactive, computed, onMounted, defineAsyncComponent } from "vue"
+import request from '@/utils/request'
+import { ElMessage, ElMessageBox } from "element-plus"
+import { useRouter } from "vue-router"
+import store from '@/stores'
+const payPage = defineAsyncComponent(() => import('@/components/payPage.vue'))
+const surveyDialog = defineAsyncComponent(() => import('@/components/surveyDialog.vue'))
 export default {
-  data() {
-    return {
+  components: {
+    'payPage': payPage,
+    'surveyDialog': surveyDialog
+  },
+  setup() {
+    const router = useRouter()
+    const state = reactive({
       dialogVisiblePay: false,
       id: '',
       totalPayment: '',
@@ -299,221 +194,84 @@ export default {
       mandatory: null,
       visible: false,
       count: 0
-    }
-  },
-  created() {
-    this.getInfo()
-  },
-  methods: {
-    changeImg(e) {
-      e.currentTarget.src = require('@/assets/timg.jpeg')
-    },
-    // //向服务端发消息
-    closed(data) {
-      this.dialogVisible = data
-    },
-    // Completion(id, status) {
-    //   this.$http
-    //     .get(
-    //       '/student/homepage/getCompletionLetterOfEnrolment?enrolmentId=' + id
-    //     )
-    //     .then(res => {
-    //       console.log(res)
-    //       window.open(res.url)
-    //     })
-    // },
-    results(id, status) {
-      if (!this.dataList.accountBlocked) {
-        this.$router.push({
-          path: `/home/myResult/${id}`,
-          query: {
-            status: status
-          }
-        })
-      }
-
-    },
-    routerPath(path) {
-      if (!this.dataList.accountBlocked) {
-        this.$router.push(path)
-      } else { return false }
-
-    },
-    // 路由
-    formatDate(val) {
-      if (!val) {
-        return ''
-      }
-      return dataUtils.formatDate(new Date(val), 'dd/MM/yyyy')
-    },
-    // 日期格式化
-    openUrl() {
-      let url = this.dataList.offer.offerFile
-      if (!url) {
-        return false
-      }
-      window.open(url, '_blank')
-    },
-
-    acceptOffer() {
-      this.id = this.dataList.offer.orderId
-      this.totalPayment = this.dataList.offer.totalPayment
-      if (this.dataList.offer.status === 'Accepted') {
-        // this.id=this.dataList.offer.orderId
-        // this.totalPayment=this.dataList.offer.totalPayment
-        // this.$alert('<p>If you have any questions regarding your payment, you may contact our financial department via<a href="mailto:fees@top.edu.au" target="_blank"> fees@top.edu.au</a> for further assistance. </p>', 'Notice', {
-        //   dangerouslyUseHTMLString: true
-        // });
-        this.dialogVisible = true
-      } else {
-        this.$confirm(
-          "If you have read and understood what's been written in the offer, then you can continue to accept it.",
-          'prompt',
-          {
-            confirmButtonText: 'YES',
-            cancelButtonText: 'NO',
-            type: 'warning'
-          }
-        )
-          .then(() => {
-            if (this.dataList.offer.status === 'Pending') {
-              this.$http
-                .post(`/student/offer/accept/${this.dataList.offer.id}`)
-                .then((res) => {
-                  if (res.paid) {
-                    this.getInfo()
-                  } else {
-                    this.getInfo()
-                    // this.id=this.dataList.offer.orderId
-                    // this.totalPayment=this.dataList.offer.totalPayment
-
-
-                    // this.$alert('<p>If you have any questions regarding your payment, you may contact our financial department via<a href="mailto:fees@top.edu.au" target="_blank"> fees@top.edu.au</a> for further assistance. </p>', 'Notice', {
-                    //   dangerouslyUseHTMLString: true
-                    // });
-                    this.dialogVisible = true
-                  }
-                })
-            }
-            // else{
-            //   // this.id=this.dataList.offer.orderId
-            //   // this.totalPayment=this.dataList.offer.totalPayment
-            //   this.dialogVisible=true
-            // }
-            // this.dialogVisible=true
-          })
-          .catch(() => {
-
-          })
-      }
-
-    },
-    handleUpdate(val) {
-      console.log('handleUpdate', val)
-      if (val) {
-        this.getInfo()
-      }
-    },
-    getInfo() {
-      this.dialogVisible = false
-      this.$http.post('/student/homepage/view', {}).then(data => {
-        // About Edit Infomation Student USI
-        sessionStorage.setItem('subOrganization', data.subOrganizationCode)
-        sessionStorage.setItem('currentCourseType', data.currentCourseType)
-        if (data && data.enrolments.list) {
-          data.enrolments.list = data.enrolments.list.filter(v => v.coEnrollStatus !== 1360)
+    })
+    const getInfo = () => {
+      request.post('/student/homepage/view').then(res => {
+        if (res && res.enrolments.list) {
+          state.enrolments.list = res.enrolments.list.filter(v => v.coEnrollStatus !== 1360)
         }
-        this.dataList = data
-        if (!this.dataList.student.photo) {
-          this.dataList.student.photo = require('@/assets/timg.jpeg')
-        }
-        this.$emit('subOrganizationCode', data.subOrganizationCode)
-        if (!this.dataList.offer) {
-          this.dataList.offer = {}
-          this.dataList.offer.status = "Invalid"
-        }
-        if (data.confirmProfileFirst) {
-          this.$alert('Confirm Your Profile Firstly', '', {
-            confirmButtonText: 'Go',
+        state.dataList = res
+        !state.dataList.offer && (state.dataList.offer = {}, state.dataList.offer.status = 'Invalid')
+        !!res.confirmProfileFirst && (
+          ElMessageBox('Confirm your profile firstly', '', {
+            comfirmButtonTxt: 'Go',
             type: 'warning',
             showClose: false
+          }).then(() => {
+            router.push('/home/myProfile')
           })
-            .then(() => {
-              this.$router.push('/home/myProfile')
-              // this.routerPath('/home/myProfile')
-            })
-            .catch(() => { })
-        }
-        if (!data.accountBlocked && !data.confirmProfileFirst && data.needAnswerSurveys && data.needAnswerSurveys.length > 0) {
-          this.queryId = data.needAnswerSurveys[0].id
-          this.visible = true
-          this.mandatory = data.needAnswerSurveys[0].mandatory
-          sessionStorage.setItem('surveyCount', ++this.count)
+        )
+        if (res.accountBlocked && res.confirmProfileFirst && res.needAnswerSurveys && res.needAnswerSurveys.length > 0) {
+          state.queryId = res.needAnswerSurveys[0].id
+          state.visible = true
+          state.mandatory = res.needAnswerSurveys[0].mandatory
+
+          store.dispatch('commitSurveryCount', ++state.count)
         }
       })
     }
-  },
-  computed: {
-    dataListcourseName: function () {
-      if (
-        this.dataList &&
-        this.dataList.enrolments &&
-        this.dataList.enrolments.list
-      ) {
-        if (this.dataList.enrolments.list[0]) {
-          return this.dataList.enrolments.list[0].courseName
-        }
-        return ''
-      } else {
-        return ''
-      }
-    },
-    dataListcampusName: function () {
-      if (
-        this.dataList &&
-        this.dataList.enrolments &&
-        this.dataList.enrolments.list
-      ) {
-        if (this.dataList.enrolments.list[0]) {
-          return this.dataList.enrolments.list[0].campusName
-        } else {
-          return ''
-        }
-      } else {
-        return ''
-      }
-    },
-  },
-  filters: {
-    routerPath(url) {
-      this.$router.push(url)
-    },
-    format(num) {
-      if (!num) {
-        return '0.00'
-      }
-      let reg = /\d{1,3}(?=(\d{3})+$)/g
+    const changeImg = () => {
 
-      if (num.toString().indexOf('.') !== -1) {
-        let arr = num.toFixed(2).split('.')
-        let str = (arr[0] + '').replace(reg, '$&,')
-        return str + arr[1]
-      } else {
-        return (num + '').replace(reg, '$&,') + '.00'
-      }
-    },
-    // 千分符console.log(num)
-    getDate(val) {
-      if (!val) {
-        return ''
-      }
-      return dataUtils.formatDate(new Date(val), 'dd/MM/yyyy')
     }
-  },
-  components: {
-    // TabList
-    paypage,
-    surveyDialog
+    const results = (id, stauts) => {
+      if (!state.dataList.accountBlocked) {
+        router.push({
+          path: `/home/myResult/${id}`,
+          query: {
+            stauts: status
+          }
+        })
+      }
+    }
+    const acceptOffer = () => {
+      state.id = state.dataList.offer.orderId
+      state.totalPayment = state.dataList.offer.totalPayment
+      if (state.dataList.offer.status === 'Accepted') {
+        state.dialogVisible = true
+      } else {
+        ElMessageBox(`If you have read and understood what's been written in the offer, then you can continue to accept it.`, 'prompt', {
+          confirmButtonText: 'YES',
+          cancelButtonText: 'NO',
+          type: 'warning'
+        }).then(() => {
+          if (state.dataList.offer.status === 'Pending') {
+            request.post(`/student/offer/accept/${state.dataList.offer.id}`).then(res => {
+              if (res.paid) {
+                getInfo()
+              } else {
+                getInfo()
+                state.dialogVisible = true
+              }
+            })
+          }
+        })
+      }
+    }
+    const handleUpdate = (val) => {
+      if (val) {
+        getInfo()
+      }
+    }
+    onMounted(() => [
+      getInfo()
+    ])
+    return {
+      handleUpdate, acceptOffer,
+      results,
+      changeImg,
+      getInfo,
+      onMounted
+    }
   }
 }
 </script>

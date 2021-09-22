@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { onMounted, reactive } from "vue"
+import { onMounted, reactive, computed } from "vue"
 import { useRouter } from "vue-router"
 import { addClass, removeClass, localGet } from '@/utils/helper'
 import request from "@/utils/request"
@@ -63,10 +63,11 @@ export default {
     const router = useRouter()
     onMounted(() => {
       const url = `/student/homepage/view`
-      if (!localGet('headerImg')) {
+      if (!store.state.headImg) {
         request.post(url).then(res => {
           state.photo = res.data.student.photo
           store.dispatch('commitHeadImg', res.data.student.photo)
+          store.dispatch('commitCode', res.data.subOrganizationCode)
         })
       } else {
         state.photo = store.state.photo

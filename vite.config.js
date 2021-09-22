@@ -10,6 +10,11 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    fs: {
+      strict: false
+    }
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

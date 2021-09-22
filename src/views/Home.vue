@@ -3,10 +3,10 @@
     <keep-alive>
       <top-header></top-header>
     </keep-alive>
-    <left-sidebar :subOrganizationCode="subOrganizationCode"></left-sidebar>
+    <LeftSidebar></LeftSidebar>
     <div class="main">
       <!-- <keep-alive> -->
-      <router-view v-on:subOrganizationCode="getSubOrganizationCode" />
+      <router-view />
       <!-- </keep-alive> -->
     </div>
   </div>
@@ -17,15 +17,9 @@ import { KeepAlive, ref } from 'vue'
 import LeftSidebar from '@/components/LeftSidebar.vue'
 import TopHeader from '@/components/TopHeader.vue'
 export default {
-  components: { LeftSideBar, TopHeader },
+  components: { TopHeader, LeftSidebar },
   setup() {
-    const subOrganizationCode = ref('')
-    const getSubOrganizationCode = (data) => subOrganizationCode.value = data
 
-    return {
-      subOrganizationCode,
-      getSubOrganizationCode
-    }
   }
 }
 </script>

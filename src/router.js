@@ -13,6 +13,13 @@ const routes = [
     path: '/home',
     name: 'home',
     component: modules['./views/Home.vue'],
+    children: [
+      {
+        name: 'homePage',
+        path: '/home/homePage',
+        component: modules['./views/Homepage.vue']
+      }
+    ]
   },
   {
     path: '/notFound',
