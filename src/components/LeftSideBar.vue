@@ -2,7 +2,6 @@
 <template>
   <div class="sidebar">
     <!-- 在body 上添加样式打开边栏 -->
-    <!-- vite无法监听文件变化，问题未知 -->
     <div class="sidebar-content ">
       <!--<h2 class="nav-title">{{ title }}</h2>-->
       <ul class="nav">
@@ -23,7 +22,7 @@
 import { computed, reactive } from "vue"
 import store from "@/stores"
 export default {
-  name: 'LeftSideBar',
+  name: 'LeftSidebar',
   setup() {
     const state = reactive({
       leftList: [
@@ -74,7 +73,8 @@ export default {
 
     return {
       showleftList,
-      state
+      state,
+      computeSubcode
     }
   }
 }

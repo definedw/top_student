@@ -89,6 +89,7 @@ export default {
       request.get('/private/auth/signout')
         .then(() => {
           store.commit('LOGIN_OUT')
+          router.push('/login')
         })
         .catch(() => {
           store.commit('LOGIN_OUT')
@@ -97,13 +98,13 @@ export default {
     const openSetting = () => {
       router.push('/home/changepassword')
     }
-    const openPofile = () => {
-      router.push('/home/myProfile')
+    const openProfile = () => {
+      router.push('/profile')
     }
     return {
       state,
       onMounted,
-      openPofile,
+      openProfile,
       openSetting,
       signOut,
       changeImg,

@@ -6,11 +6,11 @@
            style="height: auto">
         <el-row>
           <el-col :xs="24"
-                  :md="dataList.offer.status==='Invalid'?24:16"
-                  :lg="dataList.offer.status==='Invalid'?24:16"
+                  :md="state.dataList.offer.status==='Invalid'?24:16"
+                  :lg="state.dataList.offer.status==='Invalid'?24:16"
                   style="height: auto;border: none">
             <div class="my-photo">
-              <img :src="dataList.student.photo"
+              <img :src="state.dataList.student.photo"
                    alt="My Photo"
                    @error="changeImg($event)" />
             </div>
@@ -18,39 +18,39 @@
                  style="min-width: 195px;">
               <span class="tag"
                     style="margin-bottom: 10px">{{
-                dataList.student.internationalStudent
+                state.dataList.student.internationalStudent
                   ? 'International'
                   : 'Domestic'
               }}</span><span class="tag"
-                    v-if="dataList.student.feeHelp">FEE-HELP</span>
+                    v-if="state.dataList.student.feeHelp">FEE-HELP</span>
             </div>
             <div class="student-id">
               <div class="name">
-                <span class="first">{{ dataList.student.firstGivenName }}</span><span class="last">{{ dataList.student.familyName }}</span>
+                <span class="first">{{ state.dataList.student.firstGivenName }}</span><span class="last">{{ state.dataList.student.familyName }}</span>
               </div>
               <div class="student-no">
-                <span class="label">Student No: </span>{{ dataList.student.studentNum }}
+                <span class="label">Student No: </span>{{ state.dataList.student.studentNum }}
               </div>
             </div>
           </el-col>
-          <el-col :xs="dataList.offer.status==='Invalid'?0:24"
-                  :md="dataList.offer.status==='Invalid'?0:8"
-                  :lg="dataList.offer.status==='Invalid'?0:8">
+          <el-col :xs="state.dataList.offer.status==='Invalid'?0:24"
+                  :md="state.dataList.offer.status==='Invalid'?0:8"
+                  :lg="state.dataList.offer.status==='Invalid'?0:8">
             <div class="student-status">
               <div class="status"
-                   v-if="dataList.offer.status!=='Invalid'">
+                   v-if="state.dataList.offer.status!=='Invalid'">
                 <span class="label">Offer Status: </span>
-                {{ dataList.offer.paid?"Payment Completed":dataList.offer.status }}
+                {{ state.dataList.offer.paid?"Payment Completed":state.dataList.offer.status }}
               </div>
               <div class="accept-btn">
-                <el-button v-if="!dataList.offer.paid&&(dataList.offer.status === 'Pending'||dataList.offer.status === 'Accepted')"
+                <el-button v-if="!state.dataList.offer.paid&&(state.dataList.offer.status === 'Pending'||state.dataList.offer.status === 'Accepted')"
                            type="primary"
-                           :class="dataList.offer.status"
+                           :class="state.dataList.offer.status"
                            @click="acceptOffer()"
-                           :disabled='dataList.offer.status==="Invalid"'>{{
-                    dataList.offer.status === 'Pending'
+                           :disabled='state.dataList.offer.status==="Invalid"'>{{
+                    state.dataList.offer.status === 'Pending'
                       ? 'Accept Offer'
-                      : dataList.offer.status === 'Accepted'
+                      : state.dataList.offer.status === 'Accepted'
                       ? 'Pay Offer'
                       : ''
                   }}</el-button>
@@ -63,19 +63,20 @@
     <div class="page-inner">
       <div class="page-msg">
         <div class="msg-caution"
-             v-if="dataList.accountBlocked">
+             v-if="state.dataList.accountBlocked">
           Caution: Your account has been blocked by Student Admin Office, so you
           cannot be permitted to do some actions, e.g. module selection, check
           result and so on.
         </div>
       </div>
       <div>
-        <el-alert v-if="dataList.waitingAcceptOfferNumbers>0"
+        <el-alert v-if="state.dataList.waitingAcceptOfferNumbers>0"
                   type="warning"
                   :closable="false"
                   show-icon>
           <template slot="title">
-            You have {{dataList.waitingAcceptOfferNumbers===1?'one':dataList.waitingAcceptOfferNumbers}} offer{{dataList.waitingAcceptOfferNumbers>1?'s':''}} awaiting acceptance. <a class="a-alert"
+            You have {{state.dataList.waitingAcceptOfferNumbers===1?'one':state.dataList.waitingAcceptOfferNumbers}} offer{{state.dataList.waitingAcceptOfferNumbers>1?'s':''}} awaiting acceptance. <a
+               class="a-alert"
                @click="$router.push('/home/Offer')">Click here to check >></a>
           </template>
         </el-alert>
@@ -83,7 +84,7 @@
       <div class="enrolment-list"
            id="Block_button">
         <div class="card"
-             v-for="(item, index) in dataList.enrolments.list"
+             v-for="(item, index) in state.dataList.enrolments.list"
              :key="index">
           <div class="EnrolmentBox">
             <div class="EnrolmentTop"
@@ -97,7 +98,7 @@
                 <div style="color: #fff;background: #830B31;"
                      class="selectionBtn"
                      @click="routerPath('/home/signList')"
-                     :class="dataList.accountBlocked ? 'class-a' : '' "
+                     :class="state.dataList.accountBlocked ? 'class-a' : '' "
                      v-if="item.status === 'Active'&&item.courseCode!='APYP'">
                   Module Selection
                 </div>
@@ -105,13 +106,13 @@
                      class="timeTableBtn"
                      v-if="item.status !== 'Inactive'&&item.status !== 'Finished'&&item.courseCode!='APYP'"
                      @click="routerPath('/home/myTimeTable')"
-                     :class="dataList.accountBlocked ? 'class-a' : '' ">
+                     :class="state.dataList.accountBlocked ? 'class-a' : '' ">
                   My Timetable
                 </div>
                 <div style="color: #fff;background: #636471;margin-left: 10px;"
                      class="resultsBtn"
                      v-if="item.status !== 'Inactive'&&item.courseCode!='APYP'"
-                     :class="dataList.accountBlocked ? 'class-a' : '' "
+                     :class="state.dataList.accountBlocked ? 'class-a' : '' "
                      @click="results(item.id, item.status)">
                   My Results
                 </div>
@@ -124,8 +125,8 @@
 
               <span>Campus: <strong>{{ item.campusName }}</strong></span>
               <span>Start-to-End:
-                <strong>{{ item.startDate | UTCTime }} to
-                  {{ item.endDate | UTCTime}}</strong></span>
+                <strong>{{ convertTime(item.startDate) }} to
+                  {{ convertTime(item.endDate) }}</strong></span>
               <span>Credits Earned: <strong>{{ item.creditsEarned?item.creditsEarned:"0" }}</strong></span>
               <span>Scholarship:
                 <strong>{{
@@ -158,18 +159,18 @@
 </template>
 
 <script>
-import { defineAsyncComponent } from 'vue'
-import { reactive, computed, onMounted, defineAsyncComponent } from "vue"
+import { reactive, computed, onMounted } from 'vue'
 import request from '@/utils/request'
-import { ElMessage, ElMessageBox } from "element-plus"
-import { useRouter } from "vue-router"
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { useRouter } from 'vue-router'
 import store from '@/stores'
-const payPage = defineAsyncComponent(() => import('@/components/payPage.vue'))
-const surveyDialog = defineAsyncComponent(() => import('@/components/surveyDialog.vue'))
+import PayPage from '@/components/payPage.vue'
+import SurveyDialog from '@/components/surveyDialog.vue'
+import { formatDate } from '@/utils/formatTime'
 export default {
   components: {
-    'payPage': payPage,
-    'surveyDialog': surveyDialog
+    PayPage,
+    SurveyDialog
   },
   setup() {
     const router = useRouter()
@@ -197,12 +198,13 @@ export default {
     })
     const getInfo = () => {
       request.post('/student/homepage/view').then(res => {
-        if (res && res.enrolments.list) {
-          state.enrolments.list = res.enrolments.list.filter(v => v.coEnrollStatus !== 1360)
+
+        if (res.data.enrolments && res.data.enrolments.list) {
+          state.dataList.enrolments.list = res.data.enrolments.list.filter(v => v.coEnrollStatus !== 1360)
         }
-        state.dataList = res
+        state.dataList = res.data
         !state.dataList.offer && (state.dataList.offer = {}, state.dataList.offer.status = 'Invalid')
-        !!res.confirmProfileFirst && (
+        !!res.data.resultconfirmProfileFirst && (
           ElMessageBox('Confirm your profile firstly', '', {
             comfirmButtonTxt: 'Go',
             type: 'warning',
@@ -211,10 +213,10 @@ export default {
             router.push('/home/myProfile')
           })
         )
-        if (res.accountBlocked && res.confirmProfileFirst && res.needAnswerSurveys && res.needAnswerSurveys.length > 0) {
-          state.queryId = res.needAnswerSurveys[0].id
+        if (res.data.accountBlocked && res.data.confirmProfileFirst && res.data.needAnswerSurveys && res.data.needAnswerSurveys.length > 0) {
+          state.queryId = res.data.needAnswerSurveys[0].id
           state.visible = true
-          state.mandatory = res.needAnswerSurveys[0].mandatory
+          state.mandatory = res.data.needAnswerSurveys[0].mandatory
 
           store.dispatch('commitSurveryCount', ++state.count)
         }
@@ -222,6 +224,9 @@ export default {
     }
     const changeImg = () => {
 
+    }
+    const convertTime = (str) => {
+      return formatDate(str)
     }
     const results = (id, stauts) => {
       if (!state.dataList.accountBlocked) {
@@ -246,7 +251,7 @@ export default {
         }).then(() => {
           if (state.dataList.offer.status === 'Pending') {
             request.post(`/student/offer/accept/${state.dataList.offer.id}`).then(res => {
-              if (res.paid) {
+              if (res.data.resultpaid) {
                 getInfo()
               } else {
                 getInfo()
@@ -266,10 +271,13 @@ export default {
       getInfo()
     ])
     return {
-      handleUpdate, acceptOffer,
+      state,
+      handleUpdate,
+      acceptOffer,
       results,
       changeImg,
       getInfo,
+      convertTime,
       onMounted
     }
   }

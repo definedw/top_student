@@ -1,10 +1,7 @@
 import axios from 'axios'
 import router from '@/router'
 
-import {
-  maskShow,
-  maskHide,
-} from 'utils/helper'
+import { maskShow, maskHide } from 'utils/helper'
 import { ElMessage } from 'element-plus'
 
 import {
@@ -25,7 +22,7 @@ class Request {
     service: axios,
     axiosConfig: {},
     pending: [],
-    cancelToken: axios.CancelToken,
+    cancelToken: axios.CancelToken
   }
   static _instance = Request
 
@@ -40,10 +37,10 @@ class Request {
       baseURL: baseUrl,
       headers: {
         post: {
-          'Content-Type': contentType,
-        },
+          'Content-Type': contentType
+        }
       },
-      timeout: requestTimeout,
+      timeout: requestTimeout
     }
   }
   interceptorsRequest() {
@@ -54,7 +51,7 @@ class Request {
         config.cancelToken = new this[PROTECTED].cancelToken((c) => {
           this[PROTECTED].pending.push({
             url: keyOfRequest,
-            cancel: c,
+            cancel: c
           })
         })
         config.headers['authorization'] = localGet('token')
@@ -82,14 +79,13 @@ class Request {
     )
   }
   handleResponse(response) {
-
     this.removePending(this.getKeyofRequest(response.config))
 
     const { code, msg, result } = response.data
 
     switch (code) {
       case 204: {
-        return Promise.resolve({ result, msg })
+        return Promise.resolve({ result, msg, code })
       }
       case 401:
       case 404:
@@ -98,7 +94,7 @@ class Request {
         ElMessage({
           type: 'error',
           message: msg,
-          duration: 3500,
+          duration: 3500
         })
         return Promise.reject({ msg })
       }
@@ -106,7 +102,7 @@ class Request {
         ElMessage({
           type: 'error',
           message: 'Sorry,you need to login or register first.',
-          duration: 3500,
+          duration: 3500
         })
         // reToken = true
         router.push('/login')
@@ -162,7 +158,7 @@ class Request {
         resolve({
           msg: res.msg,
           data: res.result,
-          code: res.code,
+          code: res.code
         })
       }, reject)
     })
@@ -173,7 +169,7 @@ class Request {
         resolve({
           msg: res.msg,
           data: res.result,
-          code: res.code,
+          code: res.code
         })
       }, reject)
     })

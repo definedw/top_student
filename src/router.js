@@ -7,12 +7,13 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: modules['./views/Login.vue'],
+    component: modules['./views/Login.vue']
   },
   {
     path: '/home',
     name: 'home',
     component: modules['./views/Home.vue'],
+    redirect: '/home/homePage',
     children: [
       {
         name: 'homePage',
@@ -22,20 +23,30 @@ const routes = [
     ]
   },
   {
+    path: '/profile',
+    name: 'profile',
+    component: modules['./views/Profile.vue']
+  },
+  {
+    path: '/forgot',
+    name: 'forgot',
+    component: modules['./views/Forgot.vue']
+  },
+  {
     path: '/notFound',
     name: 'not_found',
-    component: NotFound,
+    component: NotFound
   },
   {
     path: '/:pathMatch(.*)*',
     name: 'not_found',
-    component: NotFound,
+    component: NotFound
   }
 ]
 
 const router = createRouter({
   history: createWebHistory(),
-  routes,
+  routes
 })
 
 export default router

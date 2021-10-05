@@ -3,7 +3,7 @@
     <keep-alive>
       <top-header></top-header>
     </keep-alive>
-    <LeftSidebar></LeftSidebar>
+    <left-sidebar></left-sidebar>
     <div class="main">
       <!-- <keep-alive> -->
       <router-view />
@@ -19,7 +19,7 @@ import TopHeader from '@/components/TopHeader.vue'
 export default {
   components: { TopHeader, LeftSidebar },
   setup() {
-
+    return {}
   }
 }
 </script>
