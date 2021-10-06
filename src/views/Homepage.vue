@@ -141,18 +141,18 @@
         </div>
       </div>
     </div>
-    <pay-page v-if="dialogVisible"
+    <pay-page v-if="state.dialogVisible"
               @close="state.dialogVisible = true"
               :id="id"
               :totalPayment="totalPayment"
               @success="getInfo"
               @default="getInfo"> </pay-page>
     <!--homePageTop-->
-    <survey-dialog v-if="visible"
+    <survey-dialog v-if="state.visible"
                    :id="queryId"
-                   :visible="visible"
+                   :visible="state.visible"
                    :mandatory="mandatory"
-                   @close="visible = false"
+                   @close="state.visible = false"
                    @handleUpdate="handleUpdate"></survey-dialog>
     <!--Enrolment-->
   </div>

@@ -33,6 +33,11 @@ const routes = [
     component: modules['./views/Forgot.vue']
   },
   {
+    path: '/setting',
+    name: 'setting',
+    component: modules['./views/Setting.vue']
+  },
+  {
     path: '/notFound',
     name: 'not_found',
     component: NotFound

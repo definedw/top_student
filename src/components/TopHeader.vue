@@ -96,7 +96,7 @@ export default {
         })
     }
     const openSetting = () => {
-      router.push('/home/changepassword')
+      router.push('/setting')
     }
     const openProfile = () => {
       router.push('/profile')

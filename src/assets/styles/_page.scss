@@ -380,7 +380,7 @@ body {
   @include v-middle;
   @include pixelborder(bottom, #ddd, 0);
   position: absolute;
-  top: 48px;
+  // top: 48px;
   right: 0;
   left: 0;
   width: 100%;
@@ -411,8 +411,7 @@ body {
 }
 
 .page-tab {
-  padding-top: 30px;
-
+  // padding-top: 30px;
   .tab-wrap {
     height: 40px;
     overflow-x: auto;
@@ -602,7 +601,7 @@ body {
   }
 
   .page-header {
-    top: 60px;
+    // top: 60px;
     padding-left: 30px;
     padding-right: 30px;
   }

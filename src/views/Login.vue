@@ -62,7 +62,6 @@
 </template>
 <script>
 import { reactive, ref } from 'vue'
-// import { router, route } from '@/utils/helper.js'
 import { useRoute, useRouter } from 'vue-router'
 import request from '@/utils/request.js'
 import store from '@/stores'
