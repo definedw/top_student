@@ -1,5 +1,11 @@
 import { createStore, Store } from 'vuex'
-import { JSONstringfy, localGet, localRemove, localSet, sessionGet } from '../utils/helper'
+import {
+  JSONstringfy,
+  localGet,
+  localRemove,
+  localSet,
+  sessionGet
+} from '../utils/helper'
 const noImg = import.meta.glob('../assets/images/timg.jpeg')
 
 const store = createStore({
@@ -9,6 +15,7 @@ const store = createStore({
       token: localGet('token') || '',
       headImg: localGet('headImg') || noImg['../assets/images/timg.jpeg'],
       subOrganizationCode: localGet('subOrganizationCode') || '',
+      currentCourseType: localGet('currentCourseType') || '',
       surveyCount: 0
     }
   },
@@ -46,6 +53,9 @@ const store = createStore({
     },
     SET_SURVERY(state, count) {
       state.surveyCount = count
+    },
+    SET_CURRENTCOURSETYPE(state, type) {
+      state.currentCourseType = type
     }
   },
   actions: {
@@ -63,6 +73,9 @@ const store = createStore({
     },
     commitSurveryCount({ commit }, count) {
       commit('SET_SURVERY', count)
+    },
+    commitCurrentType({ commit }, type) {
+      commit('SET_CURRENTCOURSETYPE', type)
     }
   }
 })

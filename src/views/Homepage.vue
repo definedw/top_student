@@ -26,7 +26,8 @@
             </div>
             <div class="student-id">
               <div class="name">
-                <span class="first">{{ state.dataList.student.firstGivenName }}</span><span class="last">{{ state.dataList.student.familyName }}</span>
+                <span class="first">{{ state.dataList.student.firstGivenName }}</span><span
+                      class="last">{{ state.dataList.student.familyName }}</span>
               </div>
               <div class="student-no">
                 <span class="label">Student No: </span>{{ state.dataList.student.studentNum }}
@@ -75,8 +76,8 @@
                   :closable="false"
                   show-icon>
           <template slot="title">
-            You have {{state.dataList.waitingAcceptOfferNumbers===1?'one':state.dataList.waitingAcceptOfferNumbers}} offer{{state.dataList.waitingAcceptOfferNumbers>1?'s':''}} awaiting acceptance. <a
-               class="a-alert"
+            You have {{state.dataList.waitingAcceptOfferNumbers===1?'one':state.dataList.waitingAcceptOfferNumbers}}
+            offer{{state.dataList.waitingAcceptOfferNumbers>1?'s':''}} awaiting acceptance. <a class="a-alert"
                @click="$router.push('/home/Offer')">Click here to check >></a>
           </template>
         </el-alert>
@@ -220,6 +221,7 @@ export default {
 
           store.dispatch('commitSurveryCount', ++state.count)
         }
+        store.dispatch('commitCurrentType', res.data.currentCourseType)
       })
     }
     const changeImg = () => {

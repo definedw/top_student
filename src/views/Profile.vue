@@ -83,8 +83,10 @@
                       :pull="4">
                 <el-checkbox class="form-checkbox__label"
                              v-model="formData.student.declareProvideUsi"
-                             :disabled="true">I declare that I understand I am required to provide a Unique Student Identifier (USI) to the institute. I understand that when I obtain my visa, I will
-                  apply for a USI through the Australian Government website and submit the USI to IMC within 14 days upon my arrival in Australia.</el-checkbox>
+                             :disabled="true">I declare that I understand I am required to provide a Unique Student Identifier (USI) to the institute.
+                  I understand that when I obtain my visa, I will
+                  apply for a USI through the Australian Government website and submit the USI to IMC within 14 days upon my arrival in Australia.
+                </el-checkbox>
               </el-col>
             </el-row>
           </el-form-item>
@@ -127,17 +129,17 @@
                       readonly></el-input>
           </el-form-item>
           <el-form-item prop="formData.student.mobileNumber"
-                        label="Telephone Number">
+                        label="Telephone">
             <el-input v-model="formData.student.mobileNumber"
                       readonly></el-input>
           </el-form-item>
           <el-form-item prop="formData.student.homeNumber"
-                        label="Home Number">
+                        label="Telephone (home)">
             <el-input v-model="formData.student.homeNumber"
                       readonly></el-input>
           </el-form-item>
           <el-form-item prop="formData.student.workNumber"
-                        label="(work)Telephone">
+                        label="Telephone (work)">
             <el-input v-model="formData.student.workNumber"
                       readonly></el-input>
           </el-form-item>
@@ -211,403 +213,115 @@
             <el-input v-model="formData.student.postcode"
                       readonly></el-input>
           </el-form-item>
+          <el-form-item v-if="formData.student.assistanceDisabilityServices"
+                        prop="formData.student.disabilityType"
+                        label="Disability Type">
+            <el-checkbox-group class="checkbox-group"
+                               v-model="formData.student.disabilityType">
+              <el-checkbox v-for="(item, index) in formData.disabilityTypeDict"
+                           :key="index"
+                           :value="item.id"
+                           :disabled="true"
+                           :label="item.id">{{ item.name }}</el-checkbox>
+            </el-checkbox-group>
+          </el-form-item>
+
+          <el-form-item v-if="formData.student.assistanceDisabilityServices"
+                        label="Willing to receive advice on support services, equipment and facilities"
+                        prop="formData.student.assistanceDisabilityServices">
+            <el-input :value="formData.student.assistanceDisabilityServices ? 'Yes' : 'No'"
+                      readonly></el-input>
+          </el-form-item>
+          <el-form-item v-if="formData.student.assistanceDisabilityServices"
+                        label="Please indicate if you need any special assistance"
+                        prop="formData.student.disabilityDescribe">
+            <el-input :value="formData.student.disabilityDescribe ? 'Yes' : 'No'"
+                      readonly></el-input>
+          </el-form-item>
+
+          <div class="content-title title">Emergency Contact</div>
+          <el-form-item label="Title"
+                        prop="formData.contact.titleName">
+            <el-input v-model="formData.contact.titleName"
+                      readonly></el-input>
+          </el-form-item>
+          <el-form-item label="First Given Name"
+                        prop="formData.contact.firstGivenName">
+            <el-input v-model="formData.contact.firstGivenName"
+                      readonly></el-input>
+          </el-form-item>
+          <el-form-item label="Family Name"
+                        prop="formData.contact.familyName">
+            <el-input v-model="formData.contact.familyName"
+                      readonly></el-input>
+          </el-form-item>
+          <el-form-item label="Relationship"
+                        prop="formData.contact.relationship">
+            <el-input v-model="formData.contact.relationship"
+                      readonly></el-input>
+          </el-form-item>
+          <el-form-item label="Telephone"
+                        prop="formData.contact.mobileNumber">
+            <el-input v-model="formData.contact.mobileNumber"
+                      readonly></el-input>
+          </el-form-item>
+          <el-form-item label="Telephone (home)"
+                        prop="formData.contact.homeNumber">
+            <el-input v-model="formData.contact.homeNumber"
+                      readonly></el-input>
+          </el-form-item>
+          <el-form-item label="Telephone (work)"
+                        prop="formData.contact.workNumber">
+            <el-input v-model="formData.contact.workNumber"
+                      readonly></el-input>
+          </el-form-item>
+          <el-form-item label="Country"
+                        prop="formData.contact.countryName">
+            <el-input v-model="formData.contact.countryName"
+                      readonly></el-input>
+          </el-form-item>
+          <el-form-item label="State or Territory"
+                        prop="formData.contact.stateName">
+            <el-input v-model="formData.contact.stateName"
+                      readonly></el-input>
+          </el-form-item>
+          <el-form-item label="Suburb of City"
+                        prop="formData.contact.suburb">
+            <el-input v-model="formData.contact.suburb"
+                      readonly></el-input>
+          </el-form-item>
+          <el-form-item label="Street Address 1"
+                        prop="formData.contact.streetLine1">
+            <el-input v-model="formData.contact.streetLine1"
+                      readonly></el-input>
+          </el-form-item>
+          <el-form-item label="Street Address 2"
+                        prop="formData.contact.streetLine2">
+            <el-input v-model="formData.contact.streetLine2"
+                      readonly></el-input>
+          </el-form-item>
+          <el-form-item label="Postcode"
+                        prop="formData.contact.postcode">
+            <el-input v-model="formData.contact.postcode"
+                      readonly></el-input>
+          </el-form-item>
+          <el-form-item label="Copy all communication"
+                        prop="formData.contact.communication">
+            <el-input v-model="formData.contact.communication"
+                      readonly></el-input>
+          </el-form-item>
+          <div class="content-title title">Others</div>
+          <el-form-item label="Highest educational attainment of parent 1"
+                        prop="formData.student.educationalParent1Name">
+            <el-input v-model="formData.student.educationalParent1Name"></el-input>
+          </el-form-item>
+          <el-form-item label="Highest educational attainment of parent 2"
+                        prop="formData.student.educationalParent2Name">
+            <el-input v-model="formData.student.educationalParent2Name"></el-input>
+          </el-form-item>
 
         </el-form>
 
-      </div>
-
-      <!--myProfileBtnBox-->
-      <div class="myProfileContent">
-        <div class="myProfileLift">
-          <div class="personal">
-            <div class="title">Personal Information</div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="title"
-                           placeholder=""
-                           v-model="myProfile.student.titleName"
-                           :disabled="true"
-                           label="Title" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="firstGivenName"
-                           v-model="myProfile.student.firstGivenName"
-                           :disabled="true"
-                           label="First Given Name" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="familyName"
-                           :disabled="true"
-                           v-model="myProfile.student.familyName"
-                           label="Family Name" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="otherGivenName"
-                           :disabled="true"
-                           v-model="myProfile.student.secondGivenName"
-                           label="Other Given Name/s" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="gender"
-                           :disabled="true"
-                           v-model="myProfile.student.genderName"
-                           v-validate="'required|max:50'"
-                           data-vv-as="Gender"
-                           label="Gender" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="dateOfBirth"
-                           :disabled="true"
-                           v-model="myProfile.student.birthDate"
-                           label="Date of Birth" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Country of Birth"
-                           :disabled="true"
-                           v-model="myProfile.student.birthCountryIdName"
-                           label="Country of Birth" />
-            </div>
-            <div class="itemList"
-                 v-if="computeUsiRequired">
-              <field-input type="text"
-                           name="Are you currently studying"
-                           :disabled="true"
-                           v-model="myProfile.student.currentlyStudyingName"
-                           label="Are you currently studying" />
-            </div>
-            <div class="itemList"
-                 v-if="">
-
-            </div>
-            <div class="itemList"
-                 v-if="computeUsiRequired && myProfile.student.currentlyStudyingName == 'Onshore in Australia'">
-
-              <field-input type="text"
-                           name="Unique Student Identifier"
-                           :disabled="true"
-                           v-model="myProfile.student.studentUsi"
-                           label="Unique Student Identifier" />
-
-            </div>
-          </div>
-          <div class="culturalBackground">
-            <div class="title">Cultural Background</div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Student Category"
-                           :disabled="true"
-                           v-model="myProfile.student.internationalStudentT"
-                           label="Student Category" />
-            </div>
-            <div v-if="!myProfile.student.internationalStudent">
-              <div class="title">Financial Related</div>
-              <div class="itemList">
-                <field-input type="text"
-                             name="Assistance Type"
-                             :disabled="true"
-                             v-model="myProfile.student.feeHelp"
-                             label="Assistance Type" />
-              </div>
-              <div class="itemList">
-                <field-input type="text"
-                             name="Tax File Number"
-                             :disabled="true"
-                             v-model="myProfile.student.taxFileNumber"
-                             label="Tax File Number" />
-              </div>
-            </div>
-          </div>
-          <div class="contactDetails">
-            <div class="title">Contact Details</div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Personal Email"
-                           :disabled="true"
-                           v-model="myProfile.student.email1"
-                           label="Personal Email" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Mobile"
-                           :disabled="true"
-                           v-model="myProfile.student.mobileNumber"
-                           label="Mobile" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Telephone"
-                           :disabled="true"
-                           v-model="myProfile.student.homeNumber"
-                           label="Telephone(Home)" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Telephone(Work)"
-                           :disabled="true"
-                           v-model="myProfile.student.workNumber"
-                           label="Telephone(Work)" />
-            </div>
-          </div>
-          <div class="localAddress">
-            <div class="title">Local Address</div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Country"
-                           :disabled="true"
-                           v-model="myProfile.Local_Address.countryIdName"
-                           label="Country" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="State or Territory"
-                           :disabled="true"
-                           v-model="myProfile.Local_Address.stateIdName"
-                           label="State or Territory" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Suburb or City"
-                           :disabled="true"
-                           v-model="myProfile.Local_Address.suburb"
-                           label="Suburb or City" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Street Address 1"
-                           :disabled="true"
-                           v-model="myProfile.Local_Address.streetLine1"
-                           label="Street Address 1" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Street Address 2"
-                           :disabled="true"
-                           v-model="myProfile.Local_Address.streetLine2"
-                           label="Street Address 2" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Postcode"
-                           :disabled="true"
-                           v-model="myProfile.Local_Address.postcode"
-                           label="Postcode" />
-            </div>
-          </div>
-          <div v-if="myProfile.student.internationalStudent">
-            <div class="title">International Address</div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Country"
-                           :disabled="true"
-                           v-model="myProfile.International_Address.countryIdName"
-                           label="Country" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Suburb or City"
-                           :disabled="true"
-                           v-model="myProfile.International_Address.suburb"
-                           label="Suburb or City" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Street Address 1"
-                           :disabled="true"
-                           v-model="myProfile.International_Address.streetLine1"
-                           label="Street Address 1" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Street Address 2"
-                           :disabled="true"
-                           v-model="myProfile.International_Address.streetLine2"
-                           label="Street Address 2" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Postcode"
-                           :disabled="true"
-                           v-model="myProfile.International_Address.postcode"
-                           label="Postcode" />
-            </div>
-          </div>
-          <div class="specialCircumstances">
-            <div class="title">Special Circumstances</div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Have any disability which may affect studies"
-                           :disabled="true"
-                           v-model="myProfile.student.disabilityTypeT"
-                           label="Have any disability which may affect studies" />
-            </div>
-            <div class="itemList"
-                 v-if="myProfile.student.assistanceDisabilityServices">
-              <div data-v-88ec899a=""
-                   class="form-row field-container"
-                   aria-invalid="false">
-                <div class="label-control">
-                  <label>Disability Type</label>
-                </div>
-                <div class="form-cont">
-                  <div class="form-group filled">
-                    <el-checkbox-group class="checkbox-group"
-                                       v-model="myProfile.student.disabilityType">
-                      <el-checkbox v-for="(item, index) in myProfile.disabilityTypeDict"
-                                   :key="index"
-                                   :value="item.id"
-                                   :disabled="true"
-                                   :label="item.id">{{ item.name }}</el-checkbox>
-                    </el-checkbox-group>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-            <div class="itemList"
-                 v-if="myProfile.student.assistanceDisabilityServices">
-              <field-input type="text"
-                           name="Willing to receive advice on support services, equipment and facilities"
-                           :disabled="true"
-                           :value="myProfile.student.receiveAdviceOnDisabilityServices?'Yes':'No'"
-                           label="Willing to receive advice on support services, equipment and facilities" />
-              <div>
-                <field-input type="text"
-                             :disabled="true"
-                             v-model="myProfile.student.disabilityDescribe"
-                             label="Please indicate if you need any special assistance" />
-              </div>
-
-            </div>
-          </div>
-        </div>
-        <div class="myProfileRight">
-
-          <div class="emergencyContact">
-            <div class="title">Emergency Contact</div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Title"
-                           :disabled="true"
-                           v-model="myProfile.contact.titleName"
-                           label="Title" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="First Given Name"
-                           :disabled="true"
-                           v-model="myProfile.contact.firstGivenName"
-                           label="First Given Name" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Family Name"
-                           :disabled="true"
-                           v-model="myProfile.contact.familyName"
-                           label="Family Name" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Relationship"
-                           :disabled="true"
-                           v-model="myProfile.contact.relationship"
-                           label="Relationship" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Mobile"
-                           :disabled="true"
-                           v-model="myProfile.contact.mobileNumber"
-                           label="Mobile" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Telephone (Home)"
-                           :disabled="true"
-                           v-model="myProfile.contact.homeNumber"
-                           label="Telephone (Home)" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Telephone (Work)"
-                           :disabled="true"
-                           v-model="myProfile.contact.workNumber"
-                           label="Telephone (Work)" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Country"
-                           :disabled="true"
-                           v-model="myProfile.contact.countryName"
-                           label="Country" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="State or Territory"
-                           :disabled="true"
-                           v-model="myProfile.contact.stateName"
-                           label="State or Territory" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Suburb or City"
-                           :disabled="true"
-                           v-model="myProfile.contact.suburb"
-                           label="Suburb or City" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Street Address 1"
-                           :disabled="true"
-                           v-model="myProfile.contact.streetLine1"
-                           label="Street Address 1" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Street Address 2"
-                           :disabled="true"
-                           v-model="myProfile.contact.streetLine2"
-                           label="Street Address 2" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Postcode"
-                           :disabled="true"
-                           v-model="myProfile.contact.postcode"
-                           label="Postcode" />
-            </div>
-            <div class="itemList">
-              <field-input type="text"
-                           name="Copy all communication"
-                           :disabled="true"
-                           v-model="myProfile.contact.communication"
-                           label="Copy all communication" />
-            </div>
-          </div>
-
-        </div>
-        <div class="emergencyContact">
-          <div class="title">Others</div>
-          <div class="itemList">
-            <field-input type="text"
-                         name="Highest educational attainment of parent 1"
-                         :disabled="true"
-                         v-model="myProfile.student.educationalParent1Name"
-                         label="Highest educational attainment of parent 1" />
-          </div>
-          <div class="itemList">
-            <field-input type="text"
-                         name="Highest educational attainment of parent 2"
-                         :disabled="true"
-                         v-model="myProfile.student.educationalParent2Name"
-                         label="Highest educational attainment of parent 2" />
-          </div>
-        </div>
       </div>
     </div>
   </div>
