@@ -3,7 +3,7 @@
     <TabList main-name="My Profile"
              main-url="/profile"></TabList>
     <div class="card"
-         v-show="state.show"
+         v-show="visible"
          style="padding: 15px">
       <div class="page-form">
         <el-form model="formData"
@@ -12,14 +12,14 @@
                  :rules="rules">
           <div class="myProfileBtnBox"
                style="margin-left:-15px;margin-right:-15px;padding:0 15px 15px;">
-            <el-button :type="myProfile.confirmed ? 'info' : 'danger'"
-                       :disabled="myProfile.confirmed"
+            <el-button :type="formData.confirmed ? 'info' : 'danger'"
+                       :disabled="formData.confirmed"
                        class="cur"
                        @click="confirmedFn">Confirm Information</el-button>
             <el-button @click="$router.push('/home/modifyProfile')">Edit Information</el-button>
           </div>
           <div class="dangerTip"
-               v-if="!state.myProfile.confirmed">
+               v-if="!formData.confirmed">
             <el-alert title='Notice: Please confirm the following information is correct, or you cannot be permitted to do any actions.'
                       :closable="false"
                       type="warning"
@@ -328,176 +328,156 @@
 </template>
 
 <script>
-
-
+import { ref, reactive, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import store from '@/stores'
 import TabList from '@/components/TabList.vue'
 
-var myProfileList = function () {
-  ; (this.titleName = null),
-    (this.firstGivenName = null),
-    (this.familyName = null),
-    (this.relationship = null),
-    (this.mobileNumber = null),
-    (this.homeNumber = null),
-    (this.workNumber = null),
-    (this.countryName = null),
-    (this.stateName = null),
-    (this.suburb = null),
-    (this.streetLine1 = null),
-    (this.streetLine2 = null),
-    (this.postcode = null),
-    (this.communication = null)
-}
+import request from '@/utils/request'
+
 export default {
-  data() {
-    return {
-      internationalStudent: this.$auth.user.student.internationalStudent,
-      show: false,
-      myProfile: {
-        student: {
-          titleName: ''
-        },
-        contact: {
-          titleName: '',
-          firstGivenName: '',
-          communication: ''
-        },
-        Local_Address: {},
-        International_Address: {},
-        addressList: [],
+  components: { TabList },
+  setup() {
+    const formData = reactive({
+      student: {
+        titleName: ''
       },
-      currentCourseType: sessionStorage.getItem('currentCourseType')
+      contact: {
+        titleName: '',
+        firstGivenName: '',
+        communication: ''
+      },
+      Local_Address: {},
+      International_Address: {},
+      addressList: [],
+    })
+    const ruleForm = ref(null)
+    const visible = ref(false)
+    const internationalStudent = computed(() => {
+      return store.userInfo.student.internationalStudent
+    })
+    const currentCourseType = computed(() => {
+      return store.state.currentCourseType
+    })
+    const rules = {
+      'student.titleName': [{ required: true, message: 'Title Name is required.', trigger: 'blur' }],
+      'student.firstGivenName': [{ required: true, message: 'First Given Name is required.', trigger: 'blur' }],
+      'student.familyName': [{ required: true, message: 'Family Name is required.', trigger: 'blur' }],
+      'student.relationship': [{ required: true, message: 'Relationship is required.', trigger: 'blur' }],
+      'student.mobileNumber': [{ required: true, message: 'Telephone Number is required.', trigger: 'blur' }],
+      'student.countryName': [{ required: true, message: 'Country Name is required.', trigger: 'blur' }],
+      'student.suburb': [{ required: true, message: 'Suburb or City is required.', trigger: 'blur' }],
+      'student.currentlyStudyingName': [{ required: computeUsiRequired ? true : false, message: 'Currently Studying Name is required.', trigger: 'blur' }],
+      'student.studentUsi': [{ required: formData.student.currentlyStudyingName && formData.student.currentlyStudyingName == 'Onshore in Australia' ? true : false, message: 'Currently Studying Name is required.', trigger: 'blur' }, { min: 10, message: 'Student Usi length is invalid.', trigger: 'change' }],
+      'contact.titleName': [{ required: true, message: 'Title Name is required.', trigger: 'blur' }],
+      'contact.firstGivenName': [{ required: true, message: 'First Given Name is required.', trigger: 'blur' }],
+      'contact.familyName': [{ required: true, message: 'Family Name is required.', trigger: 'blur' }],
+      'contact.relationship': [{ required: true, message: 'Relationship is required.', trigger: 'blur' }],
+      'contact.mobileNumber': [{ required: true, message: 'Telephone Number is required.', trigger: 'blur' }],
+      'contact.countryName': [{ required: true, message: 'Country Name is required.', trigger: 'blur' }],
+      'contact.suburb': [{ required: true, message: 'Suburb or City is required.', trigger: 'blur' }],
+      'contact.postcode': [{ required: true, message: 'Postcode is required.', trigger: 'blur' }, { min: 4, max: 10, message: 'Postcode length is invalid.', trigger: 'change' }],
+      'Local_Address.postcode': [{ required: true, message: 'Postcode is required.', trigger: 'blur' }, { min: 4, max: 10, message: 'Postcode length is invalid.', trigger: 'change' }],
+      'International_Address.postcode': [{ required: true, message: 'Postcode is required.', trigger: 'blur' }, { min: 4, max: 10, message: 'Postcode length is invalid.', trigger: 'change' }],
+
     }
-  },
-  components: {
-    TabList,
-    FieldInput
-  },
-  created() {
-    this.getInfo()
-  },
-  computed: {
-    computeUsiRequired() {
-      if (this.currentCourseType === 'Non_award_units' || this.currentCourseType === 'Accounting_Professional_Year_Program') {
+    const router = useRouter()
+    const getList = async () => {
+      const url = `/student/profile/view`
+      request.post(url, {}).then(({ data }) => {
+        if (!isArray(data.addressList)) {
+          formData.addressList = []
+        }
+        formData.Local_Address = data.addressList.find(v => v.addressType == 'Local_Address')
+        // Domestic Student default setting country id 752 = 'Australia
+        formData.Local_Address.countryId = 752
+        formData.International_Address = data.addressType.find(v => v.addressType == 'International_Address')
+        formData = Object.assign(formData, data)
+
+        if (!formData.contact) {
+          formData.contact = {
+            titleName: null,
+            firstGivenName: null,
+            familyName: null,
+            relationship: null,
+            mobileNumber: null,
+            homeNumber: null,
+            workNumber: null,
+            countryName: null,
+            stateName: null,
+            suburb: null,
+            streetLine1: null,
+            streetLine2: null,
+            postcode: null,
+            communication: null
+          }
+        }
+        if (formData.student) {
+          formData.student.feeHelp = formData.student.feeHelp ? 'FEE-HELP' : 'NO FEE-HELP'
+          formData.student.student.disabilityTypeT = formData.student.assistanceDisabilityServices ? 'Yes' : 'No'
+          formData.contact.communication = formData.contact.communication ? 'Yes' : 'No'
+          formData.student.internationalStudentT = formData.student.internationalStudentT ? 'International Student' : 'Domestic Student'
+          formData.student.mobileNumber = `${formData.student.mobileNumberCountryCode ? formData.student.mobileNumberCountryCode + '-' : ''}${formData.student.mobileNumber ? formData.student.mobileNumber : ''}`
+          formData.student.homeNumber = `${formData.student.homeNumberCountryCode ? formData.student.homeNumberCountryCode + '-' : ''}${formData.student.homeNumberAreaCode ? formData.student.homeNumberAreaCode + '-' : ''}${formData.student.homeNumber ? formData.student.homeNumber : ''}
+          `
+          formData.student.workNumber = `${formData.student.workNumberCountryCode ? formData.student.workNumberCountryCode + '-' : ''}${formData.student.workNumberAreaCode ? formData.student.workNumberAreaCode + '-' : ''}${formData.student.workNumber ? formData.student.workNumber : ''}
+          `
+        }
+        if (formData.contact) {
+          formData.contact.mobileNumber = `${formData.contact.mobileNumberCountryCode ? formData.contact.mobileNumberCountryCode + '-' : ''}${formData.contact.mobileNumber ? formData.contact.mobileNumber : ''}`
+
+          formData.contact.homeNumber = `${formData.contact.homeNumberCountryCode ? formData.contact.homeNumberCountryCode + '-' : ''}${formData.contact.homeNumberAreaCode ? formData.contact.homeNumberAreaCode + '-' : ''}${formData.contact.homeNumber ? formData.contact.homeNumber : ''}`
+
+          formData.contact.workNumber = `${formData.contact.workNumberCountryCode ? formData.contact.workNumberCountryCode + '-' : ''}${formData.contact.workNumberAreaCode ? formData.contact.workNumberAreaCode + '-' : ''}${formData.contact.workNumber ? formData.contact.workNumber : ''}`
+        }
+        if (formData.student.birthDate) {
+          formData.student.birthDate =
+            formData.student.birthDate.substring(0, 10)
+
+        }
+        visible.value = true
+      })
+    }
+    const confirmedFn = () => {
+      const url = `/student/profile/confirm`
+      if (formData.confirmed) return
+      else {
+        ruleForm.value.validate(valid => {
+          if (valid) {
+            request.get(url).then(res => {
+              ElMessage({
+                type: 'success',
+                message: 'Confirmed Success.'
+              })
+              setTimeout(() => {
+                formData.confirmed = true
+                router.push('/home')
+              }, 2000)
+            })
+          }
+        })
+      }
+    }
+    const computeUsiRequired = computed(() => {
+      if (currentCourseType === 'Non_award_units' || currentCourseType === 'Accounting_Professional_Year_Program') {
         return false
       } else {
         return true
       }
-    }
-  },
-  methods: {
-    getInfo() {
-      this.$http.get('/student/profile/view', {}).then(data => {
-        if (!data.addressList) {
-          data.addressList = []
-        }
-        data.Local_Address = data.addressList.find(item => item.addressType == 'Local_Address') || { addressType: 'Local_Address' }
-        data.Local_Address.countryId = 752
-        data.International_Address = data.addressList.find(item => item.addressType == 'International_Address') || { addressType: 'International_Address' }
-        this.myProfile = data
-
-        if (!data.contact) {
-          this.myProfile.contact = new myProfileList()
-        }
-        if (this.myProfile.student) {
-          this.myProfile.student.feeHelp = this.myProfile.student.feeHelp
-            ? 'FEE-HELP'
-            : 'No FEE-HELP'
-          this.myProfile.student.disabilityTypeT = this.myProfile.student
-            .assistanceDisabilityServices
-            ? 'Yes'
-            : 'No'
-
-          this.myProfile.contact.communication = this.myProfile.contact
-            .communication
-            ? 'Yes'
-            : 'No'
-          this.myProfile.student.internationalStudentT = this.myProfile.student
-            .internationalStudent
-            ? 'International Student'
-            : 'Domestic Student'
-          this.myProfile.student.mobileNumber = `${this.myProfile.student.mobileNumberCountryCode ? this.myProfile.student.mobileNumberCountryCode + '-' : ''}${this.myProfile.student.mobileNumber ? this.myProfile.student.mobileNumber : ''}`
-          this.myProfile.student.homeNumber = `${this.myProfile.student.homeNumberCountryCode ? this.myProfile.student.homeNumberCountryCode + '-' : ''}${this.myProfile.student.homeNumberAreaCode ? this.myProfile.student.homeNumberAreaCode + '-' : ''}${this.myProfile.student.homeNumber ? this.myProfile.student.homeNumber : ''}
-          `
-          this.myProfile.student.workNumber = `${this.myProfile.student.workNumberCountryCode ? this.myProfile.student.workNumberCountryCode + '-' : ''}${this.myProfile.student.workNumberAreaCode ? this.myProfile.student.workNumberAreaCode + '-' : ''}${this.myProfile.student.workNumber ? this.myProfile.student.workNumber : ''}
-          `
-        }
-        if (this.myProfile.contact) {
-          this.myProfile.contact.mobileNumber = `${this.myProfile.contact.mobileNumberCountryCode ? this.myProfile.contact.mobileNumberCountryCode + '-' : ''}${this.myProfile.contact.mobileNumber ? this.myProfile.contact.mobileNumber : ''}`
-
-          this.myProfile.contact.homeNumber = `${this.myProfile.contact.homeNumberCountryCode ? this.myProfile.contact.homeNumberCountryCode + '-' : ''}${this.myProfile.contact.homeNumberAreaCode ? this.myProfile.contact.homeNumberAreaCode + '-' : ''}${this.myProfile.contact.homeNumber ? this.myProfile.contact.homeNumber : ''}`
-
-          this.myProfile.contact.workNumber = `${this.myProfile.contact.workNumberCountryCode ? this.myProfile.contact.workNumberCountryCode + '-' : ''}${this.myProfile.contact.workNumberAreaCode ? this.myProfile.contact.workNumberAreaCode + '-' : ''}${this.myProfile.contact.workNumber ? this.myProfile.contact.workNumber : ''}`
-        }
-        if (this.myProfile.student.birthDate) {
-          this.myProfile.student.birthDate =
-            this.myProfile.student.birthDate.substring(0, 10)
-
-        }
-        this.show = true
-      })
-    },
-    getDate(val) {
-      if (!val) {
-        return ''
-      }
-      return dataUtils.formatDate(new Date(val), 'dd/MM/yyyy')
-    },
-    routerPath() {
-      this.$router.push('/home/modifyProfile')
-    },
-    confirmedFn() {
-      if (this.myProfile.confirmed) {
-        return false
-      }
-      if (!this.myProfile.contact.titleName ||
-        !this.myProfile.contact.firstGivenName ||
-        !this.myProfile.contact.familyName ||
-        !this.myProfile.contact.relationship ||
-        !this.myProfile.contact.mobileNumber ||
-        !this.myProfile.contact.countryName ||
-        !this.myProfile.contact.suburb ||
-        !this.myProfile.contact.streetLine1
-      ) {
-        this.$message.error('Your profile is incomplete, please edit it.')
-      }
-      if (this.computeUsiRequired) {
-        if (!this.myProfile.student.currentlyStudyingName) {
-          this.$message.error('Your profile is incomplete, please edit it.')
-          return
-        }
-        if (this.myProfile.student.currentlyStudyingName && this.myProfile.student.currentlyStudyingName == 'Onshore in Australia') {
-          if (!this.myProfile.student.studentUsi || this.myProfile.student.studentUsi.length !== 10) {
-            this.$message.error('Your profile is incomplete, please edit it.')
-            return
-          }
-        }
-      }
-      if (!this.myProfile.Local_Address.postcode || this.myProfile.Local_Address.postcode.length !== 4) {
-        this.$message.error('Your profile is incomplete, please edit it.')
-        return
-      }
-      if (this.myProfile.contact.countryName === 'Australia') {
-        if (!this.myProfile.contact.postcode || this.myProfile.contact.postcode.length !== 4) {
-          this.$message.error('Your profile is incomplete, please edit it.')
-          return
-        }
-      } else {
-        if (!this.myProfile.contact.postcode || this.myProfile.contact.postcode.length > 10) {
-          this.$message.error('Your profile is incomplete, please edit it.')
-          return
-        }
-      }
-      this.$http.get('/student/profile/confirm', {}).then(data => {
-        this.$message({
-          type: 'success',
-          message: 'success'
-        })
-        setTimeout(() => {
-          this.myProfile.confirmed = true
-          this.$router.push('/home')
-        }, 2000)
-      })
+    })
+    onMounted(() => {
+      getInfo()
+    })
+    return {
+      formData,
+      ruleForm,
+      visible,
+      computeUsiRequired,
+      onMounted,
+      getList,
+      rules,
+      confirmedFn,
+      internationalStudent
     }
   }
 }
